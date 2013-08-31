@@ -51,11 +51,9 @@ sub ponify
     # capitalizing some proper nouns, because we handle it nicely
     # NOTE: keep LHS capital letters here, because deponifying proper nouns
 
-    $line =~ s/(America)/preserve_case($1, "Amareica")/egi ;
-    $line =~ s/\b(anybody)\b/preserve_case($1, "anypony")/egi ;  
-    $line =~ s/\b(anyone)\b/preserve_case($1, "anypony")/egi ;
-    $line =~ s/\b(anybody's)\b/preserve_case($1, "anypony's")/egi ;
-    $line =~ s/\b(anyone's)\b/preserve_case($1, "anypony's")/egi ;
+    $line =~ s/\b(America)/preserve_case($1, "Amareica")/egi ;
+    $line =~ s/\b(anybody)/preserve_case($1, "anypony")/egi ;  
+    $line =~ s/\b(anyone)/preserve_case($1, "anypony")/egi ;
 
     $line =~ s/(baby)/preserve_case($1, "foal")/egi ;
     $line =~ s/(baby-minder)/preserve_case($1, "foalsitter")/egi ;
@@ -361,9 +359,9 @@ sub deponify
 
 # options and runtime
 use Getopt::Long ;
-
+    
 our %o;
-GetOptions(\%o,'deponify');
+GetOptions(\%o,'deponify','ponify');
 
 if ($o{'deponify'}) {
     print deponify $_ while <STDIN> ;

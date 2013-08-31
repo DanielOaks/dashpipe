@@ -34,7 +34,7 @@ Ponified fortune:
     fortune | B<dashpipe>
 
 
-=head1 COPYING
+=head1 LICENSE
 
 Dashpipe is copyright (c) 2013, Daniel Oaks, under 2-clause BSD license.
 
