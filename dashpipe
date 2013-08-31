@@ -1,6 +1,7 @@
 #!/usr/bin/env perl
 # Dashpipe -- Hopefully a kinda faster, less fully-featured ponypipe.
 # Copyright (c) 2013, Daniel Oaks, under 2-clause BSD license.
+# Original Ponypipe under WTFPL, by Mattias Andrée.
 
 # the base regex list is from Ponypipe:
 #  https://github.com/maandree/ponypipe
