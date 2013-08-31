@@ -1,0 +1,383 @@
+#!/usr/bin/env perl
+# Dashpipe -- Hopefully a kinda faster, less fully-featured ponypipe.
+# Copyright (c) 2013, Daniel Oaks, under 2-clause BSD license.
+
+# the base regex list is from Ponypipe:
+#  https://github.com/maandree/ponypipe
+
+use strict ;
+use utf8 ;  # we like utf8
+
+## written by Fausti
+sub preserve_case
+{
+    my ($strsrc,$strrepl) = @_ ;
+    my @src = split//,$strsrc ;
+    my @repl = split//,$strrepl ;
+    my $output = '' ;
+
+    for (my $i = 0; $i <= $#repl; $i++) {
+        my $src_letter = $i > $#src ? $src[-1] : $src[$i] ;
+        my $repl_letter = $repl[$i] ;
+
+        # preserve uppercase in replacement, mostly for proper nouns
+        if (uc($repl_letter) eq $repl_letter) {
+            $output .= $repl_letter ;
+            next ;
+        }
+
+        if (lc($src_letter) eq uc($src_letter)) {  #non-cased
+            $output .= $repl_letter ;
+        } elsif (lc($src_letter) eq $src_letter) {  #lowercase
+            $output .= lc($repl_letter) ;
+        } elsif (uc($src_letter) eq $src_letter) {  #uppercase
+            $output .= uc($repl_letter) ;
+        }
+    }
+    return $output;
+}
+
+sub ponify
+{
+    my $line = shift ;
+
+    # Rules from Ponypipe, regexes below
+
+    # 'hand' also gets \b's manually put around it, because yeah
+    # 'troll' \b both sides, 'stroll'
+    # 'money is' -> 'bits are'  to correct certain phrases
+
+    # capitalizing some proper nouns, because we handle it nicely
+    # NOTE: keep LHS capital letters here, because deponifying proper nouns
+
+    $line =~ s/(America)/preserve_case($1, "Amareica")/egi ;
+    $line =~ s/\b(anybody)\b/preserve_case($1, "anypony")/egi ;  
+    $line =~ s/\b(anyone)\b/preserve_case($1, "anypony")/egi ;
+    $line =~ s/\b(anybody's)\b/preserve_case($1, "anypony's")/egi ;
+    $line =~ s/\b(anyone's)\b/preserve_case($1, "anypony's")/egi ;
+
+    $line =~ s/(baby)/preserve_case($1, "foal")/egi ;
+    $line =~ s/(baby-minder)/preserve_case($1, "foalsitter")/egi ;
+    $line =~ s/(boyfriend)/preserve_case($1, "boyfriend")/egi ;
+    $line =~ s/(boy)/preserve_case($1, "colt")/egi ;
+    $line =~ s/\b(bro fist)\b/preserve_case($1, "bro hoof")/egi ;
+    $line =~ s/\b(bro-fist)\b/preserve_case($1, "bro-hoof")/egi ;
+    $line =~ s/\b(brofist)\b/preserve_case($1, "brohoof")/egi ;
+    $line =~ s/\b(bro fists)\b/preserve_case($1, "bro hooves")/egi ;
+    $line =~ s/\b(bro-fists)\b/preserve_case($1, "bro-hooves")/egi ;
+    $line =~ s/\b(brofists)\b/preserve_case($1, "brohooves")/egi ;
+    $line =~ s/\b(butthurt)\b/preserve_case($1, "flankhurt")/egi ;
+    $line =~ s/\b(butthurt)\b/preserve_case($1, "saddle-sore")/egi ;
+
+    $line =~ s/\b(chickenpox)\b/preserve_case($1, "ponypox")/egi ;
+    $line =~ s/(child)/preserve_case($1, "foal")/egi ;
+    $line =~ s/(children)/preserve_case($1, "foals")/egi ;
+    $line =~ s/(cowboy)/preserve_case($1, "cowpony")/egi ;
+    $line =~ s/(cowgirl)/preserve_case($1, "cowpony")/egi ;
+
+    # higher than Dollars below, to preserve deponifying
+    $line =~ s/(money is)/preserve_case($1, "bits are")/egi ;
+    $line =~ s/(money)/preserve_case($1, "bits")/egi ;
+
+    $line =~ s/\b(Doctor Who)\b/preserve_case($1, "Doctor Whooves")/egi ;
+    $line =~ s/(dollar)/preserve_case($1, "bit")/egi ;
+    $line =~ s/\b(Dr Who)\b/preserve_case($1, "Doctor Whooves")/egi ;
+    $line =~ s/(dubstep)/preserve_case($1, "dubtrot")/egi ;
+
+    $line =~ s/\b(everybody)\b/preserve_case($1, "everypony")/egi ;
+    $line =~ s/\b(everyone)\b/preserve_case($1, "everypony")/egi ;
+    $line =~ s/\b(everybody's)\b/preserve_case($1, "everypony's")/egi ;
+    $line =~ s/\b(everyone's)\b/preserve_case($1, "everypony's")/egi ;
+
+    $line =~ s/\b(facepalm)\b/preserve_case($1, "facehoof")/egi ;
+    $line =~ s/\b(facepalms)\b/preserve_case($1, "facehooves")/egi ;
+    $line =~ s/(feet)/preserve_case($1, "hooves")/egi ;
+    $line =~ s/\b(folks)\b/preserve_case($1, "foalks")/egi ;
+    $line =~ s/(fool)/preserve_case($1, "foal")/egi ;
+    $line =~ s/(foot)/preserve_case($1, "hoof")/egi ;
+    $line =~ s/\b(for heaven's sake)\b/preserve_case($1, "for pony's sake")/egi ;
+
+    $line =~ s/\b(gentlemen)\b/preserve_case($1, "gentlecolts")/egi ;
+    $line =~ s/\b(gentleman)\b/preserve_case($1, "gentlecolt")/egi ;
+    $line =~ s/\b(gentlemen's)\b/preserve_case($1, "gentlecolts'")/egi ;
+    $line =~ s/\b(gentleman's)\b/preserve_case($1, "gentlecolt's")/egi ;
+    $line =~ s/\b(girls)\b/preserve_case($1, "fillies")/egi ;
+    $line =~ s/(girlfriend)/preserve_case($1, "girlfriend")/egi ;
+    $line =~ s/(girl)/preserve_case($1, "filly")/egi ;
+    $line =~ s/\b(god)\b/preserve_case($1, "Celestia")/egi ;
+    $line =~ s/(guy)/preserve_case($1, "stallion")/egi ;
+
+    $line =~ s/\b(Halloween)\b/preserve_case($1, "Nightmare Night")/egi ;
+    $line =~ s/\b(Halloween's)\b/preserve_case($1, "Nightmare Night's")/egi ;
+    $line =~ s/(hair)/preserve_case($1, "mane")/egi ;
+    $line =~ s/\b(hands)\b/preserve_case($1, "hooves")/egi ;
+    $line =~ s/\b(hand)\b/preserve_case($1, "hoof")/egi ;
+    $line =~ s/\b(hey)\b/preserve_case($1, "hay")/egi ;
+    $line =~ s/(high fiv)/preserve_case($1, "hoof fiv")/egi ;
+    $line =~ s/(high-fiv)/preserve_case($1, "hoof-fiv")/egi ;
+    $line =~ s/\b(human)\b/preserve_case($1, "pony")/egi ;
+    $line =~ s/\b(humans)\b/preserve_case($1, "ponies")/egi ;
+    $line =~ s/\b(human's)\b/preserve_case($1, "pony's")/egi ;
+    $line =~ s/\b(humans')\b/preserve_case($1, "ponies'")/egi ;
+    $line =~ s/\b(horse)\b/preserve_case($1, "pony")/egi ;
+    $line =~ s/\b(horses)\b/preserve_case($1, "ponies")/egi ;
+    $line =~ s/\b(horse's)\b/preserve_case($1, "pony's")/egi ;
+    $line =~ s/\b(horses')\b/preserve_case($1, "ponies'")/egi ;
+
+    $line =~ s/\b(ladies)\b/preserve_case($1, "fillies")/egi ;
+    $line =~ s/\b(ladies')\b/preserve_case($1, "fillies'")/egi ;
+    $line =~ s/\b(lady)\b/preserve_case($1, "filly")/egi ;
+    $line =~ s/\b(lady's)\b/preserve_case($1, "filly's")/egi ;
+    $line =~ s/(lightning conductor)/preserve_case($1, "magical lightning rod")/egi ;
+
+    $line =~ s/\b(main)\b/preserve_case($1, "mane")/egi ;
+    $line =~ s/\b(man)\b/preserve_case($1, "stallion")/egi ;
+    $line =~ s/\b(man's)\b/preserve_case($1, "stallion's")/egi ;
+    $line =~ s/\b(man up)\b/preserve_case($1, "pony up")/egi ;
+    $line =~ s/\b(manning up)\b/preserve_case($1, "ponying up")/egi ;
+    $line =~ s/\b(manned up)\b/preserve_case($1, "ponied up")/egi ;
+    $line =~ s/\b(man-up)\b/preserve_case($1, "pony-up")/egi ;
+    $line =~ s/(manhattan)/preserve_case($1, "manehattan")/egi ;
+    $line =~ s/(marathon)/preserve_case($1, "mareathon")/egi ;
+    $line =~ s/\b(men)\b/preserve_case($1, "stallions")/egi ;
+    $line =~ s/\b(men's)\b/preserve_case($1, "stallions'")/egi ;
+    $line =~ s/(miracle)/preserve_case($1, "mareacle")/egi ;
+
+    $line =~ s/(nay)/preserve_case($1, "neigh")/egi ;
+    $line =~ s/\b(nobody)\b/preserve_case($1, "nopony")/egi ;
+    $line =~ s/\b(nobody's)\b/preserve_case($1, "nopony's")/egi ;
+    $line =~ s/\b(no one)\b/preserve_case($1, "nopony")/egi ;
+    $line =~ s/\b(no one's)\b/preserve_case($1, "nopony's")/egi ;
+    $line =~ s/\b(no-one)\b/preserve_case($1, "nopony")/egi ;
+    $line =~ s/\b(no-one's)\b/preserve_case($1, "nopony's")/egi ;
+    $line =~ s/\b(noone)\b/preserve_case($1, "nopony")/egi ;
+    $line =~ s/\b(noone's)\b/preserve_case($1, "nopony's")/egi ;
+    $line =~ s/(nottingham)/preserve_case($1, "trottingham")/egi ;
+
+    $line =~ s/\b(old-timer)\b/preserve_case($1, "old-trotter")/egi ;
+
+    $line =~ s/\b(q&a)\b/preserve_case($1, "q&neigh")/egi ;
+
+    $line =~ s/(people)/preserve_case($1, "ponies")/egi ;
+    $line =~ s/(person)/preserve_case($1, "pony")/egi ;
+    $line =~ s/(persons)/preserve_case($1, "ponies")/egi ;
+    $line =~ s/(pinky promis)/preserve_case($1, "Pinkie promis")/egi ;
+    $line =~ s/(pinky promis)/preserve_case($1, "Pinkie Pie promis")/egi ;
+    $line =~ s/(pinky swear)/preserve_case($1, "Pinkie swear")/egi ;
+    $line =~ s/(pinky swear)/preserve_case($1, "Pinkie Pie swear")/egi ;
+    $line =~ s/(Philadelphia)/preserve_case($1, "Fillydelphia")/egi ;
+
+    $line =~ s/(Saudi Arabia)/preserve_case($1, "Saddle Arabia")/egi ;
+    $line =~ s/\b(seahorse)\b/preserve_case($1, "seapony")/egi ;
+    $line =~ s/\b(seahorse's)\b/preserve_case($1, "seapony's")/egi ;
+    $line =~ s/\b(seahorses)\b/preserve_case($1, "seaponies")/egi ;
+    $line =~ s/\b(seahorses')\b/preserve_case($1, "seaponies'")/egi ;
+    $line =~ s/\b(somebody)\b/preserve_case($1, "somepony")/egi ;
+    $line =~ s/\b(somebody's)\b/preserve_case($1, "somepony's")/egi ;
+    $line =~ s/\b(someone)\b/preserve_case($1, "somepony")/egi ;
+    $line =~ s/\b(someone's)\b/preserve_case($1, "somepony's")/egi ;
+    $line =~ s/(Stalingrad)/preserve_case($1, "Stalliongrad")/egi ;
+    $line =~ s/(step)/preserve_case($1, "trot")/egi ;
+    $line =~ s/\b(sure as hell)\b/preserve_case($1, "sure as hay")/egi ;
+
+    $line =~ s/(tattoo)/preserve_case($1, "cutie mark")/egi ;
+    $line =~ s/\b(the heck)\b/preserve_case($1, "the hay")/egi ;
+    $line =~ s/\b(the hell)\b/preserve_case($1, "the hoof")/egi ;
+    $line =~ s/(the world)/preserve_case($1, "Equestria")/egi ;
+    $line =~ s/\b(troll)\b/preserve_case($1, "parasprite")/egi ;
+
+    $line =~ s/\b(Valentine's day)\b/preserve_case($1, "Hearts and Hooves day")/egi ;
+    $line =~ s/\b(Valentine's day's)\b/preserve_case($1, "Hearts and Hooves day's")/egi ;
+    $line =~ s/(Victoria's Secret)/preserve_case($1, "Rarity's Secret")/egi ;
+
+    $line =~ s/\b(woman)\b/preserve_case($1, "mare")/egi ;
+    $line =~ s/\b(woman's)\b/preserve_case($1, "mare's")/egi ;
+    $line =~ s/\b(women)\b/preserve_case($1, "mares")/egi ;
+    $line =~ s/\b(women's)\b/preserve_case($1, "mares'")/egi ;
+    $line =~ s/(world record)/preserve_case($1, "pony record")/egi ;
+    $line =~ s/(walk)/preserve_case($1, "saunter")/egi ;
+
+    return $line ;
+}
+
+sub deponify
+{
+    # deponifies input line
+    # autogenerated from regexes above
+
+    my $line = shift ;
+
+    $line =~ s/(Amareica)/preserve_case($1, "America")/egi ;
+    $line =~ s/(anypony)/preserve_case($1, "anybody")/egi ;  
+    $line =~ s/(anypony)/preserve_case($1, "anyone")/egi ;
+    $line =~ s/(anypony's)/preserve_case($1, "anybody's")/egi ;
+    $line =~ s/(anypony's)/preserve_case($1, "anyone's")/egi ;
+
+    $line =~ s/(foal)/preserve_case($1, "baby")/egi ;
+    $line =~ s/(foalsitter)/preserve_case($1, "baby-minder")/egi ;
+    $line =~ s/(boyfriend)/preserve_case($1, "boyfriend")/egi ;
+    $line =~ s/(colt)/preserve_case($1, "boy")/egi ;
+    $line =~ s/(bro hoof)/preserve_case($1, "bro fist")/egi ;
+    $line =~ s/(bro-hoof)/preserve_case($1, "bro-fist")/egi ;
+    $line =~ s/(brohoof)/preserve_case($1, "brofist")/egi ;
+    $line =~ s/(bro hooves)/preserve_case($1, "bro fists")/egi ;
+    $line =~ s/(bro-hooves)/preserve_case($1, "bro-fists")/egi ;
+    $line =~ s/(brohooves)/preserve_case($1, "brofists")/egi ;
+    $line =~ s/(flankhurt)/preserve_case($1, "butthurt")/egi ;
+    $line =~ s/(saddle-sore)/preserve_case($1, "butthurt")/egi ;
+
+    $line =~ s/(ponypox)/preserve_case($1, "chickenpox")/egi ;
+    $line =~ s/(foal)/preserve_case($1, "child")/egi ;
+    $line =~ s/(foals)/preserve_case($1, "children")/egi ;
+    $line =~ s/(cowpony)/preserve_case($1, "cowboy")/egi ;
+    $line =~ s/(cowpony)/preserve_case($1, "cowgirl")/egi ;
+
+    # higher than Dollars below, to preserve deponifying
+    $line =~ s/(bits are)/preserve_case($1, "money is")/egi ;
+    $line =~ s/(bits)/preserve_case($1, "money")/egi ;
+
+    $line =~ s/(Doctor Whooves)/preserve_case($1, "Doctor Who")/egi ;
+    $line =~ s/(bit)/preserve_case($1, "dollar")/egi ;
+    $line =~ s/(Doctor Whooves)/preserve_case($1, "Dr Who")/egi ;
+    $line =~ s/(dubtrot)/preserve_case($1, "dubstep")/egi ;
+
+    $line =~ s/(everypony)/preserve_case($1, "everybody")/egi ;
+    $line =~ s/(everypony)/preserve_case($1, "everyone")/egi ;
+    $line =~ s/(everypony's)/preserve_case($1, "everybody's")/egi ;
+    $line =~ s/(everypony's)/preserve_case($1, "everyone's")/egi ;
+
+    $line =~ s/(facehoof)/preserve_case($1, "facepalm")/egi ;
+    $line =~ s/(facehooves)/preserve_case($1, "facepalms")/egi ;
+    $line =~ s/(hooves)/preserve_case($1, "feet")/egi ;
+    $line =~ s/(foalks)/preserve_case($1, "folks")/egi ;
+    $line =~ s/(foal)/preserve_case($1, "fool")/egi ;
+    $line =~ s/(hoof)/preserve_case($1, "foot")/egi ;
+    $line =~ s/(for pony's sake)/preserve_case($1, "for heaven's sake")/egi ;
+
+    $line =~ s/(gentlecolts)/preserve_case($1, "gentlemen")/egi ;
+    $line =~ s/(gentlecolt)/preserve_case($1, "gentleman")/egi ;
+    $line =~ s/(gentlecolts')/preserve_case($1, "gentlemen's")/egi ;
+    $line =~ s/(gentlecolt's)/preserve_case($1, "gentleman's")/egi ;
+    $line =~ s/(fillies)/preserve_case($1, "girls")/egi ;
+    $line =~ s/(girlfriend)/preserve_case($1, "girlfriend")/egi ;
+    $line =~ s/(filly)/preserve_case($1, "girl")/egi ;
+    $line =~ s/(Celestia)/preserve_case($1, "god")/egi ;
+    $line =~ s/(stallion)/preserve_case($1, "guy")/egi ;
+
+    $line =~ s/(Nightmare Night)/preserve_case($1, "Halloween")/egi ;
+    $line =~ s/(Nightmare Night's)/preserve_case($1, "Halloween's")/egi ;
+    $line =~ s/(mane)/preserve_case($1, "hair")/egi ;
+    $line =~ s/(hooves)/preserve_case($1, "hands")/egi ;
+    $line =~ s/(hoof)/preserve_case($1, "hand")/egi ;
+    $line =~ s/(hay)/preserve_case($1, "hey")/egi ;
+    $line =~ s/(hoof fiv)/preserve_case($1, "high fiv")/egi ;
+    $line =~ s/(hoof-fiv)/preserve_case($1, "high-fiv")/egi ;
+    $line =~ s/(pony)/preserve_case($1, "human")/egi ;
+    $line =~ s/(ponies)/preserve_case($1, "humans")/egi ;
+    $line =~ s/(pony's)/preserve_case($1, "human's")/egi ;
+    $line =~ s/(ponies')/preserve_case($1, "humans'")/egi ;
+    $line =~ s/(pony)/preserve_case($1, "horse")/egi ;
+    $line =~ s/(ponies)/preserve_case($1, "horses")/egi ;
+    $line =~ s/(pony's)/preserve_case($1, "horse's")/egi ;
+    $line =~ s/(ponies')/preserve_case($1, "horses'")/egi ;
+
+    $line =~ s/(fillies)/preserve_case($1, "ladies")/egi ;
+    $line =~ s/(fillies')/preserve_case($1, "ladies'")/egi ;
+    $line =~ s/(filly)/preserve_case($1, "lady")/egi ;
+    $line =~ s/(filly's)/preserve_case($1, "lady's")/egi ;
+    $line =~ s/(magical lightning rod)/preserve_case($1, "lightning conductor")/egi ;
+
+    $line =~ s/(mane)/preserve_case($1, "main")/egi ;
+    $line =~ s/(stallion)/preserve_case($1, "man")/egi ;
+    $line =~ s/(stallion's)/preserve_case($1, "man's")/egi ;
+    $line =~ s/(pony up)/preserve_case($1, "man up")/egi ;
+    $line =~ s/(ponying up)/preserve_case($1, "manning up")/egi ;
+    $line =~ s/(ponied up)/preserve_case($1, "manned up")/egi ;
+    $line =~ s/(pony-up)/preserve_case($1, "man-up")/egi ;
+    $line =~ s/(manehattan)/preserve_case($1, "manhattan")/egi ;
+    $line =~ s/(mareathon)/preserve_case($1, "marathon")/egi ;
+    $line =~ s/(stallions)/preserve_case($1, "men")/egi ;
+    $line =~ s/(stallions')/preserve_case($1, "men's")/egi ;
+    $line =~ s/(mareacle)/preserve_case($1, "miracle")/egi ;
+
+    $line =~ s/(neigh)/preserve_case($1, "nay")/egi ;
+    $line =~ s/(nopony)/preserve_case($1, "nobody")/egi ;
+    $line =~ s/(nopony's)/preserve_case($1, "nobody's")/egi ;
+    $line =~ s/(nopony)/preserve_case($1, "no one")/egi ;
+    $line =~ s/(nopony's)/preserve_case($1, "no one's")/egi ;
+    $line =~ s/(nopony)/preserve_case($1, "no-one")/egi ;
+    $line =~ s/(nopony's)/preserve_case($1, "no-one's")/egi ;
+    $line =~ s/(nopony)/preserve_case($1, "noone")/egi ;
+    $line =~ s/(nopony's)/preserve_case($1, "noone's")/egi ;
+    $line =~ s/(trottingham)/preserve_case($1, "nottingham")/egi ;
+
+    $line =~ s/(old-trotter)/preserve_case($1, "old-timer")/egi ;
+
+    $line =~ s/(q&neigh)/preserve_case($1, "q&a")/egi ;
+
+    $line =~ s/(ponies)/preserve_case($1, "people")/egi ;
+    $line =~ s/(pony)/preserve_case($1, "person")/egi ;
+    $line =~ s/(ponies)/preserve_case($1, "persons")/egi ;
+    $line =~ s/(Pinkie promis)/preserve_case($1, "pinky promis")/egi ;
+    $line =~ s/(Pinkie Pie promis)/preserve_case($1, "pinky promis")/egi ;
+    $line =~ s/(Pinkie swear)/preserve_case($1, "pinky swear")/egi ;
+    $line =~ s/(Pinkie Pie swear)/preserve_case($1, "pinky swear")/egi ;
+    $line =~ s/(Fillydelphia)/preserve_case($1, "Philadelphia")/egi ;
+
+    $line =~ s/(Saddle Arabia)/preserve_case($1, "Saudi Arabia")/egi ;
+    $line =~ s/(seapony)/preserve_case($1, "seahorse")/egi ;
+    $line =~ s/(seapony's)/preserve_case($1, "seahorse's")/egi ;
+    $line =~ s/(seaponies)/preserve_case($1, "seahorses")/egi ;
+    $line =~ s/(seaponies')/preserve_case($1, "seahorses'")/egi ;
+    $line =~ s/(somepony)/preserve_case($1, "somebody")/egi ;
+    $line =~ s/(somepony's)/preserve_case($1, "somebody's")/egi ;
+    $line =~ s/(somepony)/preserve_case($1, "someone")/egi ;
+    $line =~ s/(somepony's)/preserve_case($1, "someone's")/egi ;
+    $line =~ s/(Stalliongrad)/preserve_case($1, "Stalingrad")/egi ;
+    $line =~ s/(trot)/preserve_case($1, "step")/egi ;
+    $line =~ s/(sure as hay)/preserve_case($1, "sure as hell")/egi ;
+
+    $line =~ s/(cutie mark)/preserve_case($1, "tattoo")/egi ;
+    $line =~ s/(the hay)/preserve_case($1, "the heck")/egi ;
+    $line =~ s/(the hoof)/preserve_case($1, "the hell")/egi ;
+    $line =~ s/(Equestria)/preserve_case($1, "the world")/egi ;
+    $line =~ s/(parasprite)/preserve_case($1, "troll")/egi ;
+
+    $line =~ s/(Hearts and Hooves day)/preserve_case($1, "Valentine's day")/egi ;
+    $line =~ s/(Hearts and Hooves day's)/preserve_case($1, "Valentine's day's")/egi ;
+    $line =~ s/(Rarity's Secret)/preserve_case($1, "Victoria's Secret")/egi ;
+
+    $line =~ s/(mare)/preserve_case($1, "woman")/egi ;
+    $line =~ s/(mare's)/preserve_case($1, "woman's")/egi ;
+    $line =~ s/(mares)/preserve_case($1, "women")/egi ;
+    $line =~ s/(mares')/preserve_case($1, "women's")/egi ;
+    $line =~ s/(pony record)/preserve_case($1, "world record")/egi ;
+    $line =~ s/(saunter)/preserve_case($1, "walk")/egi ;
+
+    return $line ;
+}
+
+
+# options and runtime
+use Getopt::Long ;
+
+our %o;
+GetOptions(\%o,'deponify');
+
+if ($o{'deponify'}) {
+    print deponify $_ while <STDIN> ;
+} else {
+    # ponify each input line from STDIN/input pipe, and spit out
+    print ponify $_ while <STDIN> ;
+}
+
+
+# Ponypipe -> Dashpipe Regex
+#    ^([a-z\-\'\& ]+[a-z\-\'\&])\*\s+::\s+([a-z\-\'\& ]+[a-z\-\'\&])\*
+#        $line =~ s/($1)/preserve_case(\$1, "$2")/egi ;
+#    ^([a-z\-\'\& ]+[a-z\-\'\&])\s+::\s+([a-z\-\'\& ]+[a-z\-\'\&])
+#        $line =~ s/\\b($1)\\b/preserve_case(\$1, "$2")/egi ;
+
+# Dashpipe Ponify -> Deponify Regex
+#    ^ +\$line =~ s/(?:\\b)?\(([^/)]+)\)(?:\\b)?/preserve_case\(\$1, "([^"]+)"\)/egi ;
+#        $line =~ s/$2/preserve_case(\$1, "$1")/egi ;
