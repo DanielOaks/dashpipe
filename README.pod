@@ -38,12 +38,10 @@ Ponified fortune:
 
 Dashpipe is copyright (c) 2013, Daniel Oaks, under 2-clause BSD license.
 
-Original Ponypipe under WTFPL, by Mattias Andrée.
-
 
 
 =head1 HISTORY
 
 2013 - Ponypipe written by Mattias Andrée.
 
-2013 - Ponypipe totally rewritten in Perl by Daniel Oaks <danneh@danneh.net>, using Ponypipe's rules file and syntax, and released as Dashpipe.
+2013 - Dashpipe written by Daniel Oaks <danneh@danneh.net>, as a 'faster' Ponypipe.
