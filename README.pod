@@ -1,14 +1,17 @@
 =encoding utf8
 
 
+
 =head1 NAME
 
 dashpipe - ponify/deponify text
 
 
+
 =head1 SYNOPSIS
 
 dashpipe [I<options>]
+
 
 
 =head1 DESCRIPTION
@@ -20,31 +23,43 @@ It replaces words such as 'everyone' with 'everypony'.
 It either returns a ponified version of text from an input pipe, or directly from STDIN.
 
 
+
 =head1 OPTIONS
 
 B<dashpipe> supports the following options. If none are given, I<--ponify> is assumed
 
-B<--ponify>
-    Ponify input text. Eg, turn:
-        I<"What in the world? Money isn't everything, you know.">
-        into
-        I<"What in Equestria? Bits aren't everything, you know.">
 
-B<--deponify, -d>
-    Deponify input text. Eg, turn:
-        I<"What in Equestria? Bits aren't everything, you know.">
-        into
-        I<"What in the world? Money isn't everything, you know.">
+=head2 --ponify
 
-B<--help, -h>
-    Print help message, just a small usage definition.
+Ponify input text. Eg, turn:
+    I<"What in the world? Money isn't everything, you know.">
+    into
+    I<"What in Equestria? Bits aren't everything, you know.">
 
-B<--version, -v>
-    Print B<dashpipe> mode, as something like:
-        I<dashpipe 1.0.1>
 
-B<--license>
-    Print B<dashpipe>'s license, which is also below.
+=head2 --deponify, -d
+
+Deponify input text. Eg, turn:
+    I<"What in Equestria? Bits aren't everything, you know.">
+    into
+    I<"What in the world? Money isn't everything, you know.">
+
+
+=head2 --help, -h
+
+Print help message, just a small usage definition.
+
+
+=head2 --version, -v
+
+Print B<dashpipe> version, as something like:
+    B<dashpipe 1.0.1>
+
+
+=head2 --license
+
+Print B<dashpipe>'s license, which is also below.
+
 
 
 =head1 EXAMPLES
@@ -59,6 +74,7 @@ To deponify a file:
 
 Ponified fortune:
     fortune | B<dashpipe>
+
 
 
 =head1 LICENSE
