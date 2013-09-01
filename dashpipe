@@ -1,12 +1,12 @@
 #!/usr/bin/env perl
-# Dashpipe -- Hopefully a kinda faster, less fully-featured ponypipe.
+# Dashpipe -- Utility to ponify and deponify text
 # Copyright (c) 2013, Daniel Oaks, under 2-clause BSD license.
-# Inspiration from Mattias Andrée's ponypipe.
+# Inspiration and substitutions initially from Mattias Andrée's ponypipe.
 
 use strict ;
 use utf8 ;  # we like utf8
 
-my $dashpipe_version = "1.0.2" ;
+my $dashpipe_version = "1.0.3" ;
 
 # true/false make sense to me, syntactically
 use constant {
@@ -390,7 +390,13 @@ sub deponify
 
 
 # options and runtime
-# we don't use Getopt::Long because we want this to be super duper fast
+
+# We don't use Getopt::Long because we want this to be super duper fast
+#
+# As a friend pointed out, yes, we are using several hundred discrete
+#  regexes and we're worried about performance :P
+# However, that's because Getopt::Long here seems to double the runtime,
+#  and make the script's processing delay fairly noticable
 sub arg_exists
 {
     my $match = shift ;

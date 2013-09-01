@@ -10,7 +10,7 @@ LICENSES=$(DATA)/licenses
 all: man
 
 man:
-	pod2man README.pod > $(COMMAND).1 --release="dashpipe 1.0.2" --center="Pony Utilities" --name="DASHPIPE" --section=1
+	pod2man $(COMMAND).pod > $(COMMAND).1 --release="dashpipe 1.0.3" --center="Pony Utilities" --name="DASHPIPE" --section=1
 
 
 install:
