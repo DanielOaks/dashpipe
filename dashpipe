@@ -6,7 +6,7 @@
 use strict ;
 use utf8 ;  # we like utf8
 
-my $dashpipe_version = "1.0.1" ;
+my $dashpipe_version = "1.0.2" ;
 
 # true/false make sense to me, syntactically
 use constant {
@@ -405,7 +405,7 @@ sub arg_exists
 
 
 if (arg_exists('--help') or arg_exists('-h')) {
-    print <<END ;
+    print <<END
 Usage: $0 [OPTION]
 
 Conversion modes:
@@ -421,9 +421,10 @@ If no arguments are given, --ponify is assumed.
 
 Report bugs to Daniel Oaks <danneh\@danneh.net>.
 END
+;
 }
 elsif (arg_exists('--license')) {
-    print <<END ;
+    print <<END
 Copyright (c) 2013, Daniel Oaks
 All rights reserved.
 
@@ -447,6 +448,7 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 END
+;
 }
 elsif (arg_exists('--version') or arg_exists('-V')) {
     print "Dashpipe $dashpipe_version\n" ;
