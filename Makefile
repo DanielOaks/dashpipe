@@ -14,16 +14,16 @@ man:
 
 
 install:
-	install -Dm755 "$(COMMAND)" "$(PREFIX)$(BIN)/$(COMMAND)"
-	install -Dm644 "$(COMMAND).1" "$(PREFIX)$(MAN)/$(COMMAND).1"
-	mkdir -p "$(PREFIX)$(LICENSES)/$(COMMAND)"
-	install -Dm644 "COPYING" "$(PREFIX)$(LICENSES)/$(COMMAND)/COPYING"
+	install -Dm755 "$(DESTDIR)$(COMMAND)" "$(PREFIX)$(BIN)/$(COMMAND)"
+	install -Dm644 "$(DESTDIR)$(COMMAND).1" "$(PREFIX)$(MAN)/$(COMMAND).1"
+	mkdir -p "$(DESTDIR)$(PREFIX)$(LICENSES)/$(COMMAND)"
+	install -Dm644 "COPYING" "$(DESTDIR)$(PREFIX)$(LICENSES)/$(COMMAND)/COPYING"
 
 
 uninstall:
-	rm -- "$(PREFIX)$(BIN)/$(COMMAND)"
-	rm -- "$(PREFIX)$(MAN)/$(COMMAND).1"
-	rm -r -- "$(PREFIX)$(LICENSES)/$(COMMAND)"
+	rm -- "$(DESTDIR)$(PREFIX)$(BIN)/$(COMMAND)"
+	rm -- "$(DESTDIR)$(PREFIX)$(MAN)/$(COMMAND).1"
+	rm -r -- "$(DESTDIR)$(PREFIX)$(LICENSES)/$(COMMAND)"
 
 
 clean:
