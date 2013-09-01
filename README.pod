@@ -8,7 +8,7 @@ dashpipe - ponify/deponify text
 
 =head1 SYNOPSIS
 
-dashpipe [B<--deponify>] [B<--ponify>] [B<--license>] [B<--version>]
+dashpipe [I<options>]
 
 
 =head1 DESCRIPTION
@@ -20,11 +20,38 @@ It replaces words such as 'everyone' with 'everypony'.
 It either returns a ponified version of text from an input pipe, or directly from STDIN.
 
 
+=head1 OPTIONS
+
+B<dashpipe> supports the following options. If none are given, I<--ponify> is assumed
+
+B<--ponify>
+    Ponify input text. Eg, turn:
+        I<"What in the world? Money isn't everything, you know.">
+        into
+        I<"What in Equestria? Bits aren't everything, you know.">
+
+B<--deponify, -d>
+    Deponify input text. Eg, turn:
+        I<"What in Equestria? Bits aren't everything, you know.">
+        into
+        I<"What in the world? Money isn't everything, you know.">
+
+B<--help, -h>
+    Print help message, just a small usage definition.
+
+B<--version, -v>
+    Print B<dashpipe> mode, as something like:
+        I<dashpipe 1.0.1>
+
+B<--license>
+    Print B<dashpipe>'s license, which is also below.
+
+
 =head1 EXAMPLES
 
 To ponify a file:
     B<dashpipe --ponify> < I<SOURCE> > I<TARGET>
-    OR
+    or
     B<dashpipe> < I<SOURCE> > I<TARGET>
 
 To deponify a file:
