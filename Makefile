@@ -14,8 +14,10 @@ man:
 
 
 install:
-	install -Dm755 "$(DESTDIR)$(COMMAND)" "$(PREFIX)$(BIN)/$(COMMAND)"
-	install -Dm644 "$(DESTDIR)$(COMMAND).1" "$(PREFIX)$(MAN)/$(COMMAND).1"
+	mkdir -p "$(DESTDIR)$(PREFIX)$(BIN)"
+	install -Dm755 "$(DESTDIR)$(COMMAND)" "$(DESTDIR)$(PREFIX)$(BIN)/$(COMMAND)"
+	mkdir -p "$(DESTDIR)$(PREFIX)$(MAN)"
+	install -Dm644 "$(DESTDIR)$(COMMAND).1" "$(DESTDIR)$(PREFIX)$(MAN)/$(COMMAND).1"
 	mkdir -p "$(DESTDIR)$(PREFIX)$(LICENSES)/$(COMMAND)"
 	install -Dm644 "COPYING" "$(DESTDIR)$(PREFIX)$(LICENSES)/$(COMMAND)/COPYING"
 
