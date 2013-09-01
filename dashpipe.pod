@@ -108,4 +108,4 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 2013 - Ponypipe written by Mattias Andrée.
 
-2013 - Dashpipe written by Daniel Oaks E<gt>danneh@danneh.netE<lt>, as a 'faster' Ponypipe.
+2013 - Dashpipe written by Daniel Oaks E<lt>danneh@danneh.netE<gt>, as a 'faster' Ponypipe.
