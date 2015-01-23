@@ -96,6 +96,8 @@ sub ponify
     $line =~ s/\b(butthurt)\b/preserve_case($1, "flankhurt")/egi ;
     $line =~ s/\b(butthurt)\b/preserve_case($1, "saddle-sore")/egi ;
 
+    $line =~ s/\b(capslock)\b/preserve_case($1, "royal canterlot voice")/egi ;
+    $line =~ s/\b(caps lock)\b/preserve_case($1, "royal canterlot voice")/egi ;
     $line =~ s/\b(chickenpox)\b/preserve_case($1, "ponypox")/egi ;
     $line =~ s/(child)/preserve_case($1, "foal")/egi ;
     $line =~ s/(children)/preserve_case($1, "foals")/egi ;
@@ -157,8 +159,10 @@ sub ponify
     $line =~ s/\b(lady's)\b/preserve_case($1, "filly's")/egi ;
     $line =~ s/(lightning conductor)/preserve_case($1, "magical lightning rod")/egi ;
 
+    $line =~ s/\b(mania)\b/preserve_case($1, "mane-ia")/egi ;
     $line =~ s/\b(main)\b/preserve_case($1, "mane")/egi ;
     $line =~ s/\b(man)\b/preserve_case($1, "stallion")/egi ;
+    $line =~ s/\b(mailman)\b/preserve_case($1, "mailpony")/egi ;
     $line =~ s/\b(man's)\b/preserve_case($1, "stallion's")/egi ;
     $line =~ s/\b(man up)\b/preserve_case($1, "pony up")/egi ;
     $line =~ s/\b(manning up)\b/preserve_case($1, "ponying up")/egi ;
@@ -199,12 +203,14 @@ sub ponify
     $line =~ s/\b(seahorse's)\b/preserve_case($1, "seapony's")/egi ;
     $line =~ s/\b(seahorses)\b/preserve_case($1, "seaponies")/egi ;
     $line =~ s/\b(seahorses')\b/preserve_case($1, "seaponies'")/egi ;
+    $line =~ s/\b(snowman)\b/preserve_case($1, "snowpony")/egi ;
     $line =~ s/\b(somebody)\b/preserve_case($1, "somepony")/egi ;
     $line =~ s/\b(somebody's)\b/preserve_case($1, "somepony's")/egi ;
     $line =~ s/\b(someone)\b/preserve_case($1, "somepony")/egi ;
     $line =~ s/\b(someone's)\b/preserve_case($1, "somepony's")/egi ;
     $line =~ s/(Stalingrad)/preserve_case($1, "Stalliongrad")/egi ;
     $line =~ s/(step)/preserve_case($1, "trot")/egi ;
+    $line =~ s/(stockholm)/preserve_case($1, "trotholm")/egi ;
     $line =~ s/\b(sure as hell)\b/preserve_case($1, "sure as hay")/egi ;
 
     $line =~ s/(tattoo)/preserve_case($1, "cutie mark")/egi ;
@@ -257,6 +263,7 @@ sub deponify
     $line =~ s/(flankhurt)/preserve_case($1, "butthurt")/egi ;
     $line =~ s/(saddle-sore)/preserve_case($1, "butthurt")/egi ;
 
+    $line =~ s/(royal canterlot voice)/preserve_case($1, "capslock")/egi ;
     $line =~ s/(ponypox)/preserve_case($1, "chickenpox")/egi ;
     $line =~ s/(foal)/preserve_case($1, "child")/egi ;
     $line =~ s/(foals)/preserve_case($1, "children")/egi ;
@@ -318,8 +325,10 @@ sub deponify
     $line =~ s/(filly's)/preserve_case($1, "lady's")/egi ;
     $line =~ s/(magical lightning rod)/preserve_case($1, "lightning conductor")/egi ;
 
+    $line =~ s/(mane-ia)/preserve_case($1, "mania")/egi ;
     $line =~ s/(mane)/preserve_case($1, "main")/egi ;
     $line =~ s/(stallion)/preserve_case($1, "man")/egi ;
+    $line =~ s/(mailpony)/preserve_case($1, "mailman")/egi ;
     $line =~ s/(stallion's)/preserve_case($1, "man's")/egi ;
     $line =~ s/(pony up)/preserve_case($1, "man up")/egi ;
     $line =~ s/(ponying up)/preserve_case($1, "manning up")/egi ;
@@ -361,11 +370,13 @@ sub deponify
     $line =~ s/(seaponies)/preserve_case($1, "seahorses")/egi ;
     $line =~ s/(seaponies')/preserve_case($1, "seahorses'")/egi ;
     $line =~ s/(somepony)/preserve_case($1, "somebody")/egi ;
+    $line =~ s/(snowpony)/preserve_case($1, "snowman")/egi ;
     $line =~ s/(somepony's)/preserve_case($1, "somebody's")/egi ;
     $line =~ s/(somepony)/preserve_case($1, "someone")/egi ;
     $line =~ s/(somepony's)/preserve_case($1, "someone's")/egi ;
     $line =~ s/(Stalliongrad)/preserve_case($1, "Stalingrad")/egi ;
     $line =~ s/(trot)/preserve_case($1, "step")/egi ;
+    $line =~ s/(trotholm)/preserve_case($1, "stockholm")/egi ;
     $line =~ s/(sure as hay)/preserve_case($1, "sure as hell")/egi ;
 
     $line =~ s/(cutie mark)/preserve_case($1, "tattoo")/egi ;
